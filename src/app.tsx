@@ -3,7 +3,9 @@ import React from "react";
 function App() {
     return (
         <>
-            <div></div>
+            <div>
+                <canvas id="game_canvas"></canvas>
+            </div>
         </>
     );
 }
