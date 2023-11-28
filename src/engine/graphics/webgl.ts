@@ -1,4 +1,4 @@
-function init_webgl(canvas: HTMLCanvasElement) {
+export default function init_webgl(canvas: HTMLCanvasElement) {
     const gl = canvas.getContext("webgl2");
 
     if (!gl) {
