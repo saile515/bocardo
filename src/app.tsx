@@ -1,9 +1,18 @@
-import React from "react";
+import { init_game } from "./game/main";
+import { useRef, useEffect } from "react";
 
 function App() {
+    const ref = useRef(null);
+
+    useEffect(() => {
+        init_game();
+    }, []);
+
     return (
         <>
-            <div></div>
+            <div>
+                <canvas ref={ref} id="game_canvas"></canvas>
+            </div>
         </>
     );
 }
