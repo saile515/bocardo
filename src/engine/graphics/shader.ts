@@ -6,8 +6,8 @@ export default class Shader<Attributes extends string[], Uniforms extends string
     private _attribute_keys: Attributes;
     private _uniform_keys: Uniforms;
     private _program: WebGLProgram;
-    private _attributes: { [key in keyof Attributes]: GLint };
-    private _uniforms: { [key in keyof Uniforms]: WebGLUniformLocation };
+    private _attributes: { [key in Attributes[number]]: GLint };
+    private _uniforms: { [key in Uniforms[number]]: WebGLUniformLocation };
 
     constructor(vertex_path: string, fragment_path: string, attributes: Attributes, uniforms: Uniforms) {
         this._vertex_path = vertex_path;
@@ -17,8 +17,8 @@ export default class Shader<Attributes extends string[], Uniforms extends string
 
         this._program = gl.createProgram()!;
 
-        this._attributes = {} as { [key in keyof Attributes]: GLint };
-        this._uniforms = {} as { [key in keyof Uniforms]: WebGLUniformLocation };
+        this._attributes = {} as { [key in Attributes[number]]: GLint };
+        this._uniforms = {} as { [key in Uniforms[number]]: WebGLUniformLocation };
     }
 
     async compile() {
@@ -31,18 +31,20 @@ export default class Shader<Attributes extends string[], Uniforms extends string
         // Verify vertex shader
         if (!gl.getShaderParameter(vertex_shader, gl.COMPILE_STATUS)) {
             gl.deleteShader(vertex_shader);
+            console.error(gl.getShaderInfoLog(vertex_shader));
             throw Error("Vertex shader failed to compile.");
         }
 
         // Compile fragment shader
         const fragment_source = await fetch(this._fragment_path).then((res) => res.text());
-        const fragment_shader = gl.createShader(gl.VERTEX_SHADER)!;
+        const fragment_shader = gl.createShader(gl.FRAGMENT_SHADER)!;
         gl.shaderSource(fragment_shader, fragment_source);
         gl.compileShader(fragment_shader);
 
         // Verify fragment shader
         if (!gl.getShaderParameter(fragment_shader, gl.COMPILE_STATUS)) {
             gl.deleteShader(fragment_shader);
+            console.error(gl.getShaderInfoLog(fragment_shader));
             throw Error("Fragment shader failed to compile.");
         }
 
@@ -57,26 +59,30 @@ export default class Shader<Attributes extends string[], Uniforms extends string
 
         // Initialize attributes and uniforms
         this._attribute_keys.forEach((attribute) => {
-            this._attributes[attribute as keyof Attributes] = gl.getAttribLocation(this._program, attribute);
+            this._attributes[attribute as Attributes[number]] = gl.getAttribLocation(this._program, attribute);
         });
 
         this._uniform_keys.forEach((uniform) => {
             let uniform_location = gl.getUniformLocation(this._program, uniform);
 
             if (uniform_location) {
-                this._uniforms[uniform as keyof Uniforms] = uniform_location;
+                this._uniforms[uniform as Uniforms[number]] = uniform_location;
             }
         });
     }
 
-    set_attribute(attribute: keyof Attributes, data: Buffer) {
+    use() {
+        gl.useProgram(this._program);
+    }
+
+    set_attribute(attribute: Attributes[number], data: Buffer) {
         data.bind();
         gl.vertexAttribPointer(this._attributes[attribute], data.components, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(this._attributes[attribute]);
     }
 
     // Components should be integer betweeen 1 and 4
-    set_uniform_scalar(uniform: keyof Uniforms, data: number[], components: number) {
+    set_uniform_scalar(uniform: Uniforms[number], data: number[], components: number) {
         const setter = gl[("uniform" + components + "f") as keyof WebGL2RenderingContext] as (
             uniform: WebGLUniformLocation,
             ...data: number[]
@@ -88,7 +94,7 @@ export default class Shader<Attributes extends string[], Uniforms extends string
     }
 
     // Components should be integer betweeen 1 and 4
-    set_uniform_vector(uniform: keyof Uniforms, data: number[], components: number) {
+    set_uniform_vector(uniform: Uniforms[number], data: number[], components: number) {
         const setter = gl[("uniform" + components + "fv") as keyof WebGL2RenderingContext] as (
             uniform: WebGLUniformLocation,
             data: number[],
