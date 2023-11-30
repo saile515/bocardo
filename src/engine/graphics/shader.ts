@@ -6,8 +6,10 @@ export default class Shader<Attributes extends string[], Uniforms extends string
     private _attribute_keys: Attributes;
     private _uniform_keys: Uniforms;
     private _program: WebGLProgram;
-    private _attributes: { [key in Attributes[number]]: GLint };
-    private _uniforms: { [key in Uniforms[number]]: WebGLUniformLocation };
+    private _attributes: { [key in Attributes[number]]: GLint } = {} as { [key in Attributes[number]]: GLint };
+    private _uniforms: { [key in Uniforms[number]]: WebGLUniformLocation } = {} as {
+        [key in Uniforms[number]]: WebGLUniformLocation;
+    };
 
     constructor(vertex_path: string, fragment_path: string, attributes: Attributes, uniforms: Uniforms) {
         this._vertex_path = vertex_path;
@@ -16,9 +18,6 @@ export default class Shader<Attributes extends string[], Uniforms extends string
         this._uniform_keys = uniforms;
 
         this._program = gl.createProgram()!;
-
-        this._attributes = {} as { [key in Attributes[number]]: GLint };
-        this._uniforms = {} as { [key in Uniforms[number]]: WebGLUniformLocation };
     }
 
     async compile() {
