@@ -9,4 +9,8 @@ export default class Component {
             this._parent = parent;
         }
     }
+
+    get parent() {
+        return this._parent;
+    }
 }
