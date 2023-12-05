@@ -1,9 +1,10 @@
 import Buffer from "../engine/graphics/buffer.ts";
 import Shader from "../engine/graphics/shader.ts";
-import { init_webgl, clear, draw } from "../engine/graphics/webgl.ts";
+import { clear, draw } from "../engine/graphics/webgl.ts";
+import Scene from "../engine/scene.ts";
 
 export async function init_game() {
-    init_webgl(document.getElementById("game_canvas") as HTMLCanvasElement);
+    const scene = new Scene(document.getElementById("game_canvas") as HTMLCanvasElement);
 
     const vertex_buffer = new Buffer();
     vertex_buffer.set([-0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5]);
