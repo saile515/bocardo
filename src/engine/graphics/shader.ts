@@ -81,26 +81,20 @@ export default class Shader<Attributes extends string[], Uniforms extends string
     }
 
     // Components should be integer betweeen 1 and 4
-    set_uniform_scalar(uniform: Uniforms[number], data: number[], components: number) {
-        const setter = gl[("uniform" + components + "f") as keyof WebGL2RenderingContext] as (
-            uniform: WebGLUniformLocation,
-            ...data: number[]
-        ) => void;
+    set_uniform_float(uniform: Uniforms[number], data: number[], components: number) {
+        // Throws an error if not called like this, do not touch
+        (gl as any)[("uniform" + components + "f") as keyof WebGL2RenderingContext](this._uniforms[uniform], ...data);
+    }
 
-        if (setter) {
-            setter(this._uniforms[uniform], ...data);
-        }
+    // Components should be integer betweeen 1 and 4
+    set_uniform_int(uniform: Uniforms[number], data: number[], components: number) {
+        // Throws an error if not called like this, do not touch
+        (gl as any)[("uniform" + components + "i") as keyof WebGL2RenderingContext](this._uniforms[uniform], ...data);
     }
 
     // Components should be integer betweeen 1 and 4
     set_uniform_vector(uniform: Uniforms[number], data: number[], components: number) {
-        const setter = gl[("uniform" + components + "fv") as keyof WebGL2RenderingContext] as (
-            uniform: WebGLUniformLocation,
-            data: number[],
-        ) => void;
-
-        if (setter) {
-            setter(this._uniforms[uniform], data);
-        }
+        // Throws an error if not called like this, do not touch
+        (gl as any)[("uniform" + components + "fv") as keyof WebGL2RenderingContext](this._uniforms[uniform], data);
     }
 }
