@@ -30,12 +30,12 @@ export default class Texture {
             return Promise.reject("Image could not be loaded.");
         } else {
             // Image has not loaded
-            this._image.addEventListener("onload", () => {
+            this._image.addEventListener("load", () => {
                 this.handle_loaded_image();
                 return Promise.resolve();
             });
 
-            this._image.addEventListener("onerror", () => {
+            this._image.addEventListener("error", () => {
                 return Promise.reject("Image could not be loaded");
             });
         }
