@@ -2,6 +2,7 @@ import Component from "../ecs/component.ts";
 import Texture from "../graphics/texture.ts";
 import Buffer from "../graphics/buffer.ts";
 import Shader from "../graphics/shader.ts";
+import { draw } from "../graphics/webgl.ts";
 
 export default class Sprite extends Component {
     private _texture: Texture;
@@ -55,6 +56,8 @@ export default class Sprite extends Component {
 
         this._shader.set_attribute("vertex_position", this._vertex_buffer);
         this._shader.set_attribute("texture_position", this._texture_buffer);
+
+        draw();
     }
 
     get failed() {

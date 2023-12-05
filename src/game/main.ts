@@ -1,5 +1,5 @@
 import Sprite from "../engine/components/sprite.ts";
-import { clear, draw } from "../engine/graphics/webgl.ts";
+import { clear } from "../engine/graphics/webgl.ts";
 import Scene from "../engine/scene.ts";
 
 export async function init_game() {
@@ -11,8 +11,6 @@ export async function init_game() {
         clear();
 
         scene.ecs.query<[Sprite]>([Sprite]).forEach((entity) => entity[0].draw());
-
-        draw();
 
         requestAnimationFrame(render);
     }
