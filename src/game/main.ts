@@ -1,29 +1,16 @@
-import Buffer from "../engine/graphics/buffer.ts";
-import Shader from "../engine/graphics/shader.ts";
+import Sprite from "../engine/components/sprite.ts";
 import { clear, draw } from "../engine/graphics/webgl.ts";
 import Scene from "../engine/scene.ts";
 
 export async function init_game() {
     const scene = new Scene(document.getElementById("game_canvas") as HTMLCanvasElement);
 
-    const vertex_buffer = new Buffer();
-    vertex_buffer.set([-0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5]);
-
-    const shader = new Shader<["vertex_position"], []>(
-        "/shaders/sprite.vert.glsl",
-        "/shaders/sprite.frag.glsl",
-        ["vertex_position"],
-        [],
-    );
-
-    await shader.compile();
-    shader.set_attribute("vertex_position", vertex_buffer);
+    scene.ecs.create_entity([new Sprite("/images/amogus.png")]);
 
     function render() {
         clear();
 
-        shader.use();
-        vertex_buffer.bind();
+        scene.ecs.query<[Sprite]>([Sprite]).forEach((entity) => entity[0].draw());
 
         draw();
 
