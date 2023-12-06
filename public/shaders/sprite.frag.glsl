@@ -1,7 +1,10 @@
-varying highp vec2 _texture_position;
+#version 300 es
 
+in highp vec2 texture_position;
 uniform sampler2D sampler;
 
+out highp vec4 frag_color;
+
 void main(void) {
-    gl_FragColor = texture2D(sampler, _texture_position);
+    frag_color = texture(sampler, texture_position);
 }
