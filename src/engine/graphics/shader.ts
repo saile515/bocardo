@@ -29,8 +29,8 @@ export default class Shader<Attributes extends string[], Uniforms extends string
 
         // Verify vertex shader
         if (!gl.getShaderParameter(vertex_shader, gl.COMPILE_STATUS)) {
-            gl.deleteShader(vertex_shader);
             console.error(gl.getShaderInfoLog(vertex_shader));
+            gl.deleteShader(vertex_shader);
             throw Error("Vertex shader failed to compile.");
         }
 
@@ -42,8 +42,8 @@ export default class Shader<Attributes extends string[], Uniforms extends string
 
         // Verify fragment shader
         if (!gl.getShaderParameter(fragment_shader, gl.COMPILE_STATUS)) {
-            gl.deleteShader(fragment_shader);
             console.error(gl.getShaderInfoLog(fragment_shader));
+            gl.deleteShader(fragment_shader);
             throw Error("Fragment shader failed to compile.");
         }
 
