@@ -28,7 +28,7 @@ export default class ECS {
         this._entities.push(entity);
     }
 
-    query<T extends Array<Component>>(query: (new () => ArrayElement<T>)[]) {
+    query<T extends Array<Component>>(query: (new (...arg: any[]) => ArrayElement<T>)[]) {
         const components: { [key: string]: Component[] } = {};
 
         // Initialize component array lookup table with first component in query.
