@@ -7,6 +7,7 @@ import { mat3 } from "gl-matrix";
 
 export default class Scene {
     private _active_camera: CameraBundle | null = null;
+
     readonly ecs = new ECS();
 
     constructor(canvas: HTMLCanvasElement) {
