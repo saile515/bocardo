@@ -13,9 +13,9 @@ export default class Transform extends Component {
     }
 
     private calculate_matrix() {
-        mat3.fromRotation(this._matrix, (this._rotation * Math.PI) / 180);
+        mat3.fromTranslation(this._matrix, [this._position.x, this._position.y]);
+        mat3.rotate(this._matrix, this._matrix, (this._rotation * Math.PI) / 180);
         mat3.scale(this._matrix, this._matrix, [this._scale.x, this._scale.y]);
-        mat3.translate(this._matrix, this._matrix, [this._position.x, this._position.y]);
     }
 
     set position(value: Vector2) {
