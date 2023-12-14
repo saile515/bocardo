@@ -1,4 +1,5 @@
 import Component from "../ecs/component.ts";
+import Transform from "../components/transform.ts";
 import { mat3, vec2 } from "gl-matrix";
 
 export default class Camera extends Component {
@@ -11,6 +12,7 @@ export default class Camera extends Component {
 
     calculate_projection_matrix(viewport_width: number, viewport_height: number) {
         mat3.projection(this._projection_matrix, viewport_width, viewport_height);
+        mat3.translate(this._projection_matrix, this._projection_matrix, [viewport_width / 2, viewport_height / 2]);
         // Create appropriate scale relative to screen width
         mat3.scale(
             this._projection_matrix,
@@ -23,3 +25,5 @@ export default class Camera extends Component {
         return this._projection_matrix;
     }
 }
+
+export type CameraBundle = [Camera, Transform];
