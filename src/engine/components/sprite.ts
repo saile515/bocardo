@@ -4,7 +4,7 @@ import Shader from "../graphics/shader.ts";
 import { draw } from "../graphics/webgl.ts";
 
 // vp_matrix = view projection matrix
-let _sprite_shader: Shader<[], ["sampler", "vp_matrix"]>;
+let _sprite_shader: Shader<[], ["sampler", "vp_matrix", "model_matrix"]>;
 let _shader_ready = false;
 
 export default class Sprite extends Component {
@@ -45,11 +45,11 @@ export default class Sprite extends Component {
         if (_sprite_shader && _shader_ready) return _sprite_shader;
         if (_sprite_shader && !_shader_ready) return;
 
-        _sprite_shader = new Shader<[], ["sampler", "vp_matrix"]>(
+        _sprite_shader = new Shader<[], ["sampler", "vp_matrix", "model_matrix"]>(
             "/shaders/sprite.vert.glsl",
             "/shaders/sprite.frag.glsl",
             [],
-            ["sampler", "vp_matrix"],
+            ["sampler", "vp_matrix", "model_matrix"],
         );
 
         _sprite_shader.compile().then(() => {
