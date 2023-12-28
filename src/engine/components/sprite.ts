@@ -3,36 +3,23 @@ import Texture from "../graphics/texture.ts";
 import Shader from "../graphics/shader.ts";
 import { draw } from "../graphics/webgl.ts";
 
+// vp_matrix = view projection matrix
+let _sprite_shader: Shader<[], ["sampler", "vp_matrix", "model_matrix"]>;
+let _shader_ready = false;
+
 export default class Sprite extends Component {
     private _texture: Texture;
-    private _shader = new Shader<[], ["sampler"]>(
-        "/shaders/sprite.vert.glsl",
-        "/shaders/sprite.frag.glsl",
-        [],
-        ["sampler"],
-    );
-    private _ready = false;
     private _failed = false;
+    private _texture_ready: boolean = false;
 
     constructor(image_source: string) {
         super();
-
-        let shader_ready: boolean, texture_ready: boolean;
-        this._shader.compile().then(() => {
-            shader_ready = true;
-            if (texture_ready) {
-                this._ready = true;
-            }
-        });
 
         this._texture = new Texture(image_source);
         this._texture
             .init()
             .then(() => {
-                texture_ready = true;
-                if (shader_ready) {
-                    this._ready = true;
-                }
+                this._texture_ready = true;
             })
             .catch(() => {
                 this._failed = true;
@@ -40,18 +27,33 @@ export default class Sprite extends Component {
     }
 
     draw() {
-        if (!this._ready) {
+        if (!this._texture_ready || !Sprite.shader) {
             return;
         }
 
-        this._shader.use();
-
-        this._shader.set_uniform_int("sampler", [0], 1);
+        Sprite.shader.set_uniform_int("sampler", [0], 1);
 
         draw();
     }
 
     get failed() {
         return this._failed;
+    }
+
+    static get shader() {
+        if (!gl) return;
+        if (_sprite_shader && _shader_ready) return _sprite_shader;
+        if (_sprite_shader && !_shader_ready) return;
+
+        _sprite_shader = new Shader<[], ["sampler", "vp_matrix", "model_matrix"]>(
+            "/shaders/sprite.vert.glsl",
+            "/shaders/sprite.frag.glsl",
+            [],
+            ["sampler", "vp_matrix", "model_matrix"],
+        );
+
+        _sprite_shader.compile().then(() => {
+            _shader_ready = true;
+        });
     }
 }

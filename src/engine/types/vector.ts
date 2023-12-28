@@ -8,10 +8,10 @@ export class Vector2 {
     }
 
     get x() {
-        return this._x
+        return this._x;
     }
 
     get y() {
-        return this._y
+        return this._y;
     }
 }

@@ -97,4 +97,14 @@ export default class Shader<Attributes extends string[], Uniforms extends string
         // Throws an error if not called like this, do not touch
         (gl as any)[("uniform" + components + "fv") as keyof WebGL2RenderingContext](this._uniforms[uniform], data);
     }
+
+    // Components should be integer between 2 and 4, matrix of n*n size
+    set_uniform_matrix(uniform: Uniforms[number], data: Float32Array, components: number) {
+        // Throws an error if not called like this, do not touch
+        (gl as any)[("uniformMatrix" + components + "fv") as keyof WebGL2RenderingContext](
+            this._uniforms[uniform],
+            false,
+            data,
+        );
+    }
 }

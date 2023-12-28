@@ -14,9 +14,6 @@ export function init_webgl(canvas: HTMLCanvasElement) {
     const global = globalThis || window;
 
     global.gl = gl;
-
-    // Flip textures
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 }
 
 export function clear() {

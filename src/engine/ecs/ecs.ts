@@ -17,7 +17,7 @@ export default class ECS {
         this._components[class_name].push(instance);
     }
 
-    create_entity(components: Component[]) {
+    create_entity<T extends Component[]>(components: T) {
         const entity = new Entity();
 
         components.forEach((component) => {
@@ -26,6 +26,8 @@ export default class ECS {
         });
 
         this._entities.push(entity);
+
+        return components;
     }
 
     query<T extends Array<Component>>(query: (new (...arg: any[]) => ArrayElement<T>)[]) {
