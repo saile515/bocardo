@@ -1,17 +1,17 @@
-import Sprite from "../engine/components/sprite.ts";
-import Camera, { CameraBundle } from "../engine/components/camera.ts";
-import Transform from "../engine/components/transform.ts";
-import Scene from "../engine/scene.ts";
+import * as Twodo from "twodo";
 
 export async function init_game() {
     const canvas = document.getElementById("game_canvas") as HTMLCanvasElement;
 
-    const scene = new Scene(canvas);
-    const camera = scene.ecs.create_entity<CameraBundle>([new Camera(canvas.width, canvas.height), new Transform()]);
+    const scene = new Twodo.Scene(canvas);
+    const camera = scene.ecs.create_entity<Twodo.CameraBundle>([
+        new Twodo.Camera(canvas.width, canvas.height),
+        new Twodo.Transform(),
+    ]);
 
     scene.set_active_camera(camera);
 
-    scene.ecs.create_entity([new Sprite("/images/amogus.png"), new Transform()]);
+    scene.ecs.create_entity([new Twodo.Sprite("/images/amogus.png"), new Twodo.Transform()]);
 
     function render() {
         scene.draw();
